@@ -10,6 +10,8 @@ Just 3 components needed:
 - OLED display 128x64 SSD1309
 - A button (or two, if you want to duck!)
 
+[Youtube video](https://www.youtube.com/watch?v=635SnybBRD8)
+
 ## Instructions
 
 0. Assemble
