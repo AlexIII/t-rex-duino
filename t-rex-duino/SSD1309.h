@@ -23,9 +23,8 @@ public:
     VerticalAddressingMode = 0x01,
     PageAddressingMode = 0x02,
   };
-  const AddressingMode addressingMode;
-  SSD1309(SPI_TYPE &spi, const uint8_t cs, const uint8_t dc, const uint8_t res, const uint16_t screenBufferSize, const AddressingMode addressingMode = HorizontalAddressingMode): 
-    spi(spi), cs(cs), dc(dc), res(res), screenBufferSize(screenBufferSize), addressingMode(addressingMode) {}
+  SSD1309(SPI_TYPE &spi, const uint8_t cs, const uint8_t dc, const uint8_t res, const uint16_t screenBufferSize): 
+    spi(spi), cs(cs), dc(dc), res(res), screenBufferSize(screenBufferSize) {}
   void begin() {
     pinMode(cs, OUTPUT);
     digitalWrite(cs, HIGH);
@@ -46,6 +45,9 @@ public:
   void setInverse(const bool v) {
     sendc(v? 0xA7 : 0xA6);
   }
+  void setAddressingMode(const AddressingMode addressingMode) {
+    sendc(0x20, addressingMode);
+  }
 private:
   /* lcd control */
   void init() {
@@ -53,7 +55,7 @@ private:
     //sendc(0xA5, 1); //Entire Display ON
     //sendc(0xA7);  //Inverse Mode
 
-    sendc(0x20, addressingMode); //Set Addressing Mode
+    //sendc(0x20, addressingMode); //Set Addressing Mode
   }
   /* send bytes */
   void sendc(const uint8_t c1) {

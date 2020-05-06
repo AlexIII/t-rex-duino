@@ -72,6 +72,7 @@ const uint8_t font5x8_digits_data[] PROGMEM = {
 static Symbol numbers(font5x8_digits_data, 5, 8, 10);
 
 /* Text and icons */
+#include "assets/splash-screen.h"
 #include "assets/game-over.h"
 static const BitmapMasked game_overver_bm(game_over_bitmap, game_over_mask);
 #include "assets/restart-icon.h"

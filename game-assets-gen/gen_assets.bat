@@ -24,3 +24,5 @@ py .\img-conv.py .\game-bitmaps\pterodactyl-2.png > ..\t-rex-duino\assets\pterod
 py .\img-conv.py .\game-bitmaps\game-over.png > ..\t-rex-duino\assets\game-over.h
 py .\img-conv.py .\game-bitmaps\restart-icon.png > ..\t-rex-duino\assets\restart-icon.h
 py .\img-conv.py .\game-bitmaps\hearts-5x.png > ..\t-rex-duino\assets\hearts-5x.h
+
+py .\img-conv.py .\game-bitmaps\splash-screen.png > ..\t-rex-duino\assets\splash-screen.h
