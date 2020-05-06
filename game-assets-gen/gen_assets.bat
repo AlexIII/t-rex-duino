@@ -3,8 +3,8 @@ py .\img-conv.py .\game-bitmaps\trex-up-2s.png > ..\t-rex-duino\assets\trex-up-2
 py .\img-conv.py .\game-bitmaps\trex-up-3s.png > ..\t-rex-duino\assets\trex-up-3.h
 py .\img-conv.py .\game-bitmaps\trex-duck-1s.png > ..\t-rex-duino\assets\trex-duck-1.h
 py .\img-conv.py .\game-bitmaps\trex-duck-2s.png > ..\t-rex-duino\assets\trex-duck-2.h
-py .\img-conv.py .\game-bitmaps\trex-dead-1s.png > ..\t-rex-duino\assets\trex-dead-1.h
-py .\img-conv.py .\game-bitmaps\trex-dead-2s.png > ..\t-rex-duino\assets\trex-dead-2.h
+py .\img-conv.py .\game-bitmaps\trex-dead-1s-no-outline.png > ..\t-rex-duino\assets\trex-dead-1-no-outline.h
+py .\img-conv.py .\game-bitmaps\trex-dead-2s-no-outline.png > ..\t-rex-duino\assets\trex-dead-2-no-outline.h
 
 py .\img-conv.py .\game-bitmaps\ground-1.png > ..\t-rex-duino\assets\ground-1.h
 py .\img-conv.py .\game-bitmaps\ground-2.png > ..\t-rex-duino\assets\ground-2.h

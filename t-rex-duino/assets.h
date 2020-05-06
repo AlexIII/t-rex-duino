@@ -18,15 +18,15 @@
 #include "assets/trex-up-3.h"
 #include "assets/trex-duck-1.h"
 #include "assets/trex-duck-2.h"
-#include "assets/trex-dead-1.h"
-#include "assets/trex-dead-2.h"
+#include "assets/trex-dead-1-no-outline.h"
+#include "assets/trex-dead-2-no-outline.h"
 static const BitmapMasked trex_up_1(trex_up_1s_bitmap, trex_up_1s_mask);
 static const BitmapMasked trex_up_2(trex_up_2s_bitmap, trex_up_2s_mask);
 static const BitmapMasked trex_up_3(trex_up_3s_bitmap, trex_up_3s_mask);
 static const BitmapMasked trex_duck_1(trex_duck_1s_bitmap, trex_duck_1s_mask);
 static const BitmapMasked trex_duck_2(trex_duck_2s_bitmap, trex_duck_2s_mask);
-static const BitmapMasked trex_dead_1(trex_dead_1s_bitmap, 0);
-static const BitmapMasked trex_dead_2(trex_dead_2s_bitmap, 0);
+static const BitmapMasked trex_dead_1(trex_dead_1s_no_outline_bitmap, trex_dead_1s_no_outline_mask);
+static const BitmapMasked trex_dead_2(trex_dead_2s_no_outline_bitmap, trex_dead_2s_no_outline_mask);
 
 /* Ground */
 #include "assets/ground-1.h"
