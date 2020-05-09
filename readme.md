@@ -18,7 +18,7 @@ Just 3 components needed:
 
 <img width="600" src="img/sch.png" />
 
-1. Compile and flash sketch from `t-rex-duino/` to your Arduino
+1. Flash [that sketch](https://github.com/AlexIII/t-rex-duino/releases/download/v1.0/Arduino-sketch-t-rex-duino-v1.0.zip) to your Arduino
 2. Play!
 3. Repeat from step 2
 
