@@ -1,3 +1,5 @@
+rem "This batch script converts all sprite images to header files."
+
 py .\img-conv.py .\game-bitmaps\trex-up-1s.png > ..\t-rex-duino\assets\trex-up-1.h
 py .\img-conv.py .\game-bitmaps\trex-up-2s.png > ..\t-rex-duino\assets\trex-up-2.h
 py .\img-conv.py .\game-bitmaps\trex-up-3s.png > ..\t-rex-duino\assets\trex-up-3.h

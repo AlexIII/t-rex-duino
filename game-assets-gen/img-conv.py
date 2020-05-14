@@ -1,3 +1,11 @@
+# Python >= 3.7.1
+
+# This script converts bitmap image *.png into two c-array: one 
+# containing bitmap data (*_bitmap) and other containing transparency data (*_mask).
+# First two bytes in arrays are width and height in pixels.
+# The rest is bitmap data. Data is stored in row-major order.
+# Each row element (byte) represents a *column* of 8 pixels.
+
 from PIL import Image
 import os
 import sys
