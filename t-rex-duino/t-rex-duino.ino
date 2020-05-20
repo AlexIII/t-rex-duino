@@ -10,6 +10,21 @@
  * LCD: OLED SSD1309 128x64
 */ 
 
+/* Hardware Connections */
+//buttons
+#define JUMP_BUTTON 6
+#define DUCK_BUTTON 5
+//LCD
+#define LCD_CS 2
+#define LCD_DC 3
+#define LCD_RESET 4
+//LCD_SDA -> 11 (SPI SCK)
+//LCD_SCL -> 13 (SPI MOSI)
+
+/* Misc. settings */
+//#define AUTO_PLAY //uncomment to enable auto-play mode
+//#define RESET_HI_SCORE //uncomment to reset HI score, flash your device, than comment it back and flash again
+
 /* Game Balance Settings */
 #define PLAYER_SAFE_ZONE_WIDTH 32 //minimum distance between obstacles (px)
 #define CACTI_RESPAWN_RATE 50 //lower -> more frequent, max 255
@@ -23,17 +38,6 @@
 #define DAY_NIGHT_SWITCH_CYCLES 1024 //better to be power of 2
 #define TARGET_FPS_START 23
 #define TARGET_FPS_MAX 48 //gradually increase FPS to that value to make the game faster and harder
-
-/* Hardware Connections */
-//buttons
-#define JUMP_BUTTON 6
-#define DUCK_BUTTON 5
-//LCD
-#define LCD_CS 2
-#define LCD_DC 3
-#define LCD_RESET 4
-//LCD_SDA -> 11 (SPI SCK)
-//LCD_SCL -> 13 (SPI MOSI)
 
 /* Display Settings */
 #define LCD_HEIGHT 64U
@@ -192,9 +196,23 @@ void gameLoop(uint16_t &hiScore) {
       heartLive.eat();
     }
 
+#ifndef AUTO_PLAY
     //constrols
     if(isPressedJump()) trex.jump();
     trex.duck(isPressedDuck());
+#else
+    const int8_t trexXright = trex.bitmap->width + trex.position.x;
+    //auto jump
+    if(
+      (cactus1.position.x <= trexXright + 5 && cactus1.position.x > trexXright) || 
+      (cactus2.position.x <= trexXright + 5 && cactus2.position.x > trexXright) || 
+      (pterodactyl1.position.y > 30 && pterodactyl1.position.x <= trexXright + 5 && pterodactyl1.position.x > trexXright)
+    ) trex.jump();
+    //auto duck
+    trex.duck(
+      (pterodactyl1.position.y <= 30 && pterodactyl1.position.y > 20 && pterodactyl1.position.x <= trexXright + 15 && pterodactyl1.position.x > trex.position.x)
+    );
+#endif
 
     //logic and animation step
     for(uint8_t i = 0; i < sprites.size(); ++i)
@@ -240,7 +258,9 @@ void setup() {
   spalshScreen();
   lcd.setAddressingMode(LCD_IF_VIRTUAL_WIDTH(SSD1309<SPIClass>::VerticalAddressingMode, SSD1309<SPIClass>::HorizontalAddressingMode));
   srand((randByte()<<8) | randByte());
-  //EEPROM.put(EEPROM_HI_SCORE, hiScore); //uncomment to set HI score to 0
+#ifdef RESET_HI_SCORE
+  EEPROM.put(EEPROM_HI_SCORE, hiScore);
+#endif
   EEPROM.get(EEPROM_HI_SCORE, hiScore);
   if(hiScore == 0xFFFF) hiScore = 0;
 }
