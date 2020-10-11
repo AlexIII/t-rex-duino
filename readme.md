@@ -13,7 +13,8 @@ Just 3 components needed:
 [Youtube video](https://www.youtube.com/watch?v=635SnybBRD8)
 
 **Update**
-Now supporting [OLED display SH1106/SSD1306 I2C](#using-oled-display-sh1106/ssd1306-i2c).
+
+Now supporting SH1106/SSD1306 based I2C OLED display!
 
 ## Instructions
 
@@ -21,7 +22,7 @@ Now supporting [OLED display SH1106/SSD1306 I2C](#using-oled-display-sh1106/ssd1
 
 <img width="600" src="img/sch.png" />
 
-1. Flash [that sketch](https://github.com/AlexIII/t-rex-duino/releases/download/v1.0/Arduino-sketch-t-rex-duino-v1.0.zip) to your Arduino
+1. Flash [that sketch](https://github.com/AlexIII/t-rex-duino/releases/download/v1.1/Arduino-sketch-t-rex-duino-v1.1.zip) to your Arduino
 2. Play!
 3. Repeat from step 2
 
@@ -38,7 +39,7 @@ You can add these resistors right on top of 10k resistors that already present (
 
 <img width="600" src="img/sch-sh1106.png" />
 
-3. Select OLED display type at the beginning of `t-rex-duino.ino` sketch by uncommenting one of the following lines (SSD1309 selected by default).
+2. Select OLED display type at the beginning of `t-rex-duino.ino` sketch by uncommenting one of the following lines (SSD1309 selected by default).
 ```
 //#define LCD_SSD1309
 //#define LCD_SH1106
