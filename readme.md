@@ -30,7 +30,7 @@ Now supporting SH1106/SSD1306 based I2C OLED display!
 
 <img width="250" src="img/t-rex-demo-sh1106.gif" />
 
-0. In order to use SH1106/SSD1306 you will need to add two 470 ohm resistors to the dispaly board. 
+0. In order to use SH1106/SSD1306 you will need to add two 470 ohm resistors to the display board. 
 You can add these resistors right on top of 10k resistors that already present (or replace them).
 
 <img width="250" src="img/res-mod-sh1106.jpg" />
