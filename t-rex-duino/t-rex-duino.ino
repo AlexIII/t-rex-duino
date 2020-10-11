@@ -7,23 +7,34 @@
  * License: MIT
  * -------Hardware------
  * Board: Arduino Uno / Nano / Pro / pro mini
- * LCD: OLED SSD1309 128x64
+ * Display: OLED SSD1309 SPI 128x64  *OR*  SH1106/SSD1306 I2C 128x64 (130x64) (132x64)
 */ 
 
 /* Hardware Connections */
-//buttons
+// -- Buttons --
 #define JUMP_BUTTON 6
 #define DUCK_BUTTON 5
-//LCD
-#define LCD_CS 2
-#define LCD_DC 3
-#define LCD_RESET 4
-//LCD_SDA -> 11 (SPI SCK)
-//LCD_SCL -> 13 (SPI MOSI)
 
-/* Misc. settings */
+// -- Display Selection (uncomment ONE of the options) -- 
+#define LCD_SSD1309
+//#define LCD_SH1106      //If you see abnormal vertical line at the left edge of the display, select LCD_SSD1306
+//#define LCD_SSD1306     //If you see abnormal vertical line at the right edge of the display, select LCD_SH1106
+
+// -- Display Connection for SSD1309 --
+#define LCD_SSD1309_CS 2
+#define LCD_SSD1309_DC 3
+#define LCD_SSD1309_RESET 4
+//LCD_SSD1309_SDA -> 11 (SPI SCK)
+//LCD_SSD1309_SCL -> 13 (SPI MOSI)
+
+// -- Display Connection for SH1106/SSD1306 --
+//LCD_SH1106_SDA -> A4 (I2C SDA)
+//LCD_SH1106_SCL -> A5 (I2C SCL)
+
+/* Misc. Settings */
 //#define AUTO_PLAY //uncomment to enable auto-play mode
 //#define RESET_HI_SCORE //uncomment to reset HI score, flash your device, than comment it back and flash again
+//#define PRINT_DEBUG_INFO
 
 /* Game Balance Settings */
 #define PLAYER_SAFE_ZONE_WIDTH 32 //minimum distance between obstacles (px)
@@ -44,13 +55,16 @@
 #define LCD_WIDTH 128U
 
 /* Render Settings */
-//#define VIRTUAL_HEIGHT_BUFFER_ROWS_BY_8_PIXELS 1
-#define VIRTUAL_WIDTH_BUFFER_COLS 16
+#ifdef LCD_SSD1309
+  //#define VIRTUAL_HEIGHT_BUFFER_ROWS_BY_8_PIXELS 1
+  #define VIRTUAL_WIDTH_BUFFER_COLS 16
+#else
+  //VIRTUAL_HEIGHT_BUFFER_ROWS_BY_8_PIXELS is not supported
+  #define VIRTUAL_HEIGHT_BUFFER_ROWS_BY_8_PIXELS 4
+#endif
 
 /* Includes */
-#include <SPI.h>
 #include <EEPROM.h>
-#include "SSD1309.h"
 #include "array.h"
 #include "TrexPlayer.h"
 #include "Ground.h"
@@ -78,7 +92,17 @@
 #endif
 #define LCD_PART_BUFF_SZ ((LCD_PART_BUFF_HEIGHT/8)*LCD_PART_BUFF_WIDTH)
 
-static SSD1309<SPIClass> lcd(SPI, LCD_CS, LCD_DC, LCD_RESET, LCD_BYTE_SZIE);
+#ifdef LCD_SSD1309
+  #include <SPI.h>
+  #include "SSD1309.h"
+  static SSD1309<SPIClass> lcd(SPI, LCD_SSD1309_CS, LCD_SSD1309_DC, LCD_SSD1309_RESET, LCD_BYTE_SZIE);
+#else
+  #include "I2C.h"
+  #include "SH1106.h"
+  I2C i2c;
+  SH1106<I2C> lcd(i2c, LCD_BYTE_SZIE);
+#endif
+
 static uint16_t hiScore = 0;
 static bool firstStart = true;
 
@@ -225,14 +249,16 @@ void gameLoop(uint16_t &hiScore) {
     //switch day and night
     if(!(score%DAY_NIGHT_SWITCH_CYCLES)) lcd.setInverse(night = !night);
 
+    const uint8_t frameTime = 1000/targetFPS;
+#ifdef PRINT_DEBUG_INFO
     //print CPU load statistics
     const uint32_t dt = millis() - prvT;
-    const uint8_t frameTime = 1000/targetFPS;
     uint32_t left = frameTime > dt? frameTime - dt : 0;
     Serial.print("CPU: ");
     Serial.print(100 - 100*left / frameTime);
     Serial.print("% ");
     Serial.println(dt);
+#endif
 
     //throttle
     while(millis() - prvT < frameTime);
@@ -241,11 +267,11 @@ void gameLoop(uint16_t &hiScore) {
 }
 
 void spalshScreen() {
-  lcd.setAddressingMode(SSD1309<SPIClass>::HorizontalAddressingMode);
-  //Awful, I know. But it just for the splash screen.
-  for(uint16_t i = 0; i < LCD_BYTE_SZIE; ++i) {
-    const uint8_t v = pgm_read_byte(splash_screen_bitmap + 2 + i);
-    lcd.fillScreen(&v, 1);
+  lcd.setAddressingMode(lcd.HorizontalAddressingMode);
+  uint8_t buff[32];
+  for(uint8_t i = 0; i < LCD_BYTE_SZIE/sizeof(buff); ++i) {
+    memcpy_P(buff, splash_screen_bitmap + 2 + uint16_t(i) * sizeof(buff), sizeof(buff));
+    lcd.fillScreen(buff, sizeof(buff));
   }
   for(uint8_t i = 50; i && !isPressedJump(); --i) delay(100);
 }
@@ -256,7 +282,7 @@ void setup() {
   Serial.begin(250000);
   lcd.begin();
   spalshScreen();
-  lcd.setAddressingMode(LCD_IF_VIRTUAL_WIDTH(SSD1309<SPIClass>::VerticalAddressingMode, SSD1309<SPIClass>::HorizontalAddressingMode));
+  lcd.setAddressingMode(LCD_IF_VIRTUAL_WIDTH(lcd.VerticalAddressingMode, lcd.HorizontalAddressingMode));
   srand((randByte()<<8) | randByte());
 #ifdef RESET_HI_SCORE
   EEPROM.put(EEPROM_HI_SCORE, hiScore);
